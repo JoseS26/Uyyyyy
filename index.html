@@ -3,37 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Revolver - Sitio Oficial</title>
+    <title>Una pregunta importante...</title>
     <style>
+        /* Estilos generales y colores tipo Spiderman */
         body {
-            font-family: Arial, sans-serif;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #0d1117; /* Fondo oscuro */
+            color: #ffffff;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             text-align: center;
             padding: 20px;
-            background-color: #1a1a1a;
-            color: white;
+            box-sizing: border-box;
         }
-        .boton {
-            display: block;
-            margin: 15px auto;
-            padding: 15px;
-            background-color: #e50914;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            width: 80%;
-            max-width: 300px;
+        
+        #mensaje {
+            font-size: 26px;
+            margin-bottom: 40px;
+            min-height: 80px;
             font-weight: bold;
+            line-height: 1.4;
+            transition: opacity 0.4s ease; /* Efecto suave al cambiar el texto */
+        }
+        
+        .boton-respuesta {
+            background-color: #e23636; /* Rojo Spiderman */
+            color: white;
+            border: 2px solid #504caf; /* Azul Spiderman */
+            padding: 15px 30px;
+            font-size: 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            transition: transform 0.2s, background-color 0.2s;
+            margin: 10px;
+            display: inline-block;
+            font-weight: bold;
+            -webkit-tap-highlight-color: transparent; /* Quita el borde azul en móviles al tocar */
+        }
+        
+        .boton-respuesta:active {
+            transform: scale(0.95); /* Efecto de hundirse al presionar */
+        }
+        
+        .escondido {
+            display: none !important;
+        }
+        
+        .gif-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-top: 20px;
+            box-shadow: 0 0 15px rgba(226, 54, 54, 0.5); /* Resplandor rojo */
         }
     </style>
 </head>
 <body>
 
-    <h1>Revolver</h1>
-    <p>Bienvenidos a nuestra página oficial.</p>
+    <div id="mensaje">¡Hola! 👋</div>
 
-    <a href="#" class="boton">Escuchar en Spotify</a>
-    <a href="#" class="boton">Próximos Toques</a>
-    <a href="#" class="boton">Instagram</a>
+    <div id="botones-container">
+        <button id="btn-principal" class="boton-respuesta" onclick="siguientePaso()">¡Hola!</button>
+    </div>
 
+    <div id="botones-finales" class="escondido">
+        <button class="boton-respuesta" onclick="respuestaFinal('si')">¡Obvio que sí! 🕸️</button>
+        <button class="boton-respuesta" style="background-color: #333; border-color: #555;" onclick="respuestaFinal('no')">No puedo 😔</button>
+    </div>
+
+    <div id="gif-final" class="gif-container escondido">
+        <img src="https://media.giphy.com/media/BWD3CtcudWL28/giphy.gif" alt="Spiderman">
+    </div>
+
+    <script>
+        // Aquí configuras el diálogo. Cada línea es un paso.
+        const dialogos = [
+            { texto: "Tengo una pregunta muy importante que hacerte...", boton: "¿De qué se trata? 🤔" },
+            { texto: "Quiero tomarme un pequeño descanso del código y de los ensayos esta semana...", boton: "Aja... sigue 👀" },
+            { texto: "¿Me acompañarías al cine a ver la nueva de Spider-Man?", boton: "" } // El botón aquí no importa porque mostraremos el Sí/No
+        ];
+
+        let pasoActual = 0;
+
+        function siguientePaso() {
+            const mensajeEl = document.getElementById('mensaje');
+            const btnPrincipal = document.getElementById('btn-principal');
+            const botonesFinales = document.getElementById('botones-finales');
+
+            // Desvanecemos el texto
+            mensajeEl.style.opacity = 0;
+
+            // Esperamos un momento y cambiamos el contenido
+            setTimeout(() => {
+                if (pasoActual < dialogos.length - 1) {
+                    // Actualizamos texto y botón
+                    mensajeEl.innerText = dialogos[pasoActual].texto;
+                    btnPrincipal.innerText = dialogos[pasoActual].boton;
+                    pasoActual++;
+                } else if (pasoActual === dialogos.length - 1) {
+                    // Última pregunta: Ocultamos el botón principal y mostramos Sí/No
+                    mensajeEl.innerText = dialogos[pasoActual].texto;
+                    btnPrincipal.classList.add('escondido');
+                    botonesFinales.classList.remove('escondido');
+                }
+                // Hacemos aparecer el nuevo texto
+                mensajeEl.style.opacity = 1;
+            }, 400); // 400 milisegundos de transición
+        }
+
+        function respuestaFinal(respuesta) {
+            const mensajeEl = document.getElementById('mensaje');
+            const botonesFinales = document.getElementById('botones-finales');
+            const gifFinal = document.getElementById('gif-final');
+
+            // Ocultamos las opciones
+            botonesFinales.classList.add('escondido');
+
+            if (respuesta === 'si') {
+                mensajeEl.innerText = "¡Genial! Yo invito las palomas. 🍿🕷️";
+                gifFinal.classList.remove('escondido'); // Mostramos el GIF animado
+            } else {
+                mensajeEl.innerText = "¡Oh, qué lástima! Será para la próxima. 🥲";
+            }
+        }
+    </script>
 </body>
 </html>
