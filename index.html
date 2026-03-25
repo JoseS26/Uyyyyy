@@ -13,7 +13,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background-color: #0d1117; /* Fondo oscuro */
+            background-color: #0d1117; 
             color: #ffffff;
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             text-align: center;
@@ -23,31 +23,47 @@
         
         #mensaje {
             font-size: 26px;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
             min-height: 80px;
             font-weight: bold;
             line-height: 1.4;
-            transition: opacity 0.4s ease; /* Efecto suave al cambiar el texto */
+            transition: opacity 0.4s ease; 
         }
         
+        #botones-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            max-width: 400px;
+            transition: opacity 0.4s ease;
+        }
+
         .boton-respuesta {
-            background-color: #e23636; /* Rojo Spiderman */
+            background-color: #e23636; 
             color: white;
-            border: 2px solid #504caf; /* Azul Spiderman */
+            border: 2px solid #504caf; 
             padding: 15px 30px;
-            font-size: 20px;
+            font-size: 18px;
             border-radius: 25px;
             cursor: pointer;
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
             transition: transform 0.2s, background-color 0.2s;
-            margin: 10px;
-            display: inline-block;
             font-weight: bold;
-            -webkit-tap-highlight-color: transparent;
+            -webkit-tap-highlight-color: transparent; 
+            width: 100%;
         }
         
         .boton-respuesta:active {
-            transform: scale(0.95);
+            transform: scale(0.95); 
+        }
+
+        #botones-finales {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            max-width: 400px;
         }
         
         .escondido {
@@ -59,7 +75,7 @@
             height: auto;
             border-radius: 10px;
             margin-top: 20px;
-            box-shadow: 0 0 15px rgba(226, 54, 54, 0.5);
+            box-shadow: 0 0 15px rgba(226, 54, 54, 0.5); 
         }
     </style>
 </head>
@@ -68,7 +84,7 @@
     <div id="mensaje">¡Hola! 👋</div>
 
     <div id="botones-container">
-        <button id="btn-principal" class="boton-respuesta" onclick="siguientePaso()">¡Hola!</button>
+        <button class="boton-respuesta" onclick="irA('inicio')">¡Hola!</button>
     </div>
 
     <div id="botones-finales" class="escondido">
@@ -81,36 +97,115 @@
     </div>
 
     <script>
-        const dialogos = [
-            { texto: "Tengo una pregunta muy importante que hacerte...", boton: "¿De qué se trata? 🤔" },
-            { texto: "Yo estaba pensandooooooooo 👀", boton: "Aja... sigue 👀" },
-            { texto: "¿Quisieras ir a ver el estreno de SPIDER MAN BRAND NEW DAY conmigo?", boton: "" }
-        ];
+        // MOTOR DE HISTORIA: Cada bloque es una "escena" con su texto y sus opciones.
+        const historia = {
+            inicio: {
+                texto: "Tengo una pregunta muy importante que hacerte...",
+                botones: [
+                    { texto: "¿De qué se trata? 🤔", destino: "como_estas" }
+                ]
+            },
+            como_estas: {
+                texto: "Espera, primero... ¿cómo estás hoy? 😌",
+                botones: [
+                    { texto: "¡Súper bien! ✨", destino: "bien" },
+                    { texto: "Sobreviviendo a la semana 😵‍💫", destino: "cansada" },
+                    { texto: "Intrigada por tu pregunta 👀", destino: "intrigada" }
+                ]
+            },
+            // RUTA 1: Si dice que está súper bien
+            bien: {
+                texto: "¡Qué éxito! Yo también. Aunque confieso que andaba peleando con un código para la u, pero ya quedó.",
+                botones: [
+                    { texto: "¡Qué bueno! ¿Y la música?", destino: "musica_bien" }
+                ]
+            },
+            musica_bien: {
+                texto: "Súper. Practicando bastante con la guitarra para que Revolver suene brutal. Pero bueno, no vine a hablar de mis acordes...",
+                botones: [
+                    { texto: "Entonces dime...", destino: "transicion" }
+                ]
+            },
+            // RUTA 2: Si dice que está cansada
+            cansada: {
+                texto: "Te entiendo perfecto... Yo también quedé un poco frito después del último ensayo con Revolver.",
+                botones: [
+                    { texto: "¿Estuvo pesado?", destino: "ensayo_cansada" }
+                ]
+            },
+            ensayo_cansada: {
+                texto: "Un poco, sacando temas nuevos con la guitarra. Pero justo por eso creo que ambos necesitamos una buena pausa...",
+                botones: [
+                    { texto: "Totalmente de acuerdo 😮‍💨", destino: "transicion" }
+                ]
+            },
+            // RUTA 3: Si dice que está intrigada
+            intrigada: {
+                texto: "Jajaja, la curiosidad mató al gato... pero bueno, el misterio le da un toque emocionante.",
+                botones: [
+                    { texto: "¡Ya dimeee! 😠", destino: "intrigada_2" }
+                ]
+            },
+            intrigada_2: {
+                texto: "Tranquila, tranquila. Prometo no aburrirte hablando de mis tareas o de mis acordes en la guitarra. Vale la pena la espera.",
+                botones: [
+                    { texto: "Eso espero... 👀", destino: "transicion" }
+                ]
+            },
+            // CONVERGENCIA: Todas las rutas llegan aquí
+            transicion: {
+                texto: "Bueno, te cuento... yo estaba pensandooooooooo 👀",
+                botones: [
+                    { texto: "Aja... sigue 👀", destino: "pregunta_cine" }
+                ]
+            },
+            pregunta_cine: {
+                texto: "¿Quisieras ir a ver el estreno de SPIDER MAN BRAND NEW DAY conmigo?",
+                botones: [] // Aquí no hay botones porque activamos los botones finales de Sí y No
+            }
+        };
 
-        let pasoActual = 0;
-        let contadorNo = 0; // Agregamos un contador para las veces que dice "No"
+        let contadorNo = 0;
 
-        function siguientePaso() {
+        // Función que navega entre las escenas
+        function irA(nodo) {
             const mensajeEl = document.getElementById('mensaje');
-            const btnPrincipal = document.getElementById('btn-principal');
+            const contenedorBotones = document.getElementById('botones-container');
             const botonesFinales = document.getElementById('botones-finales');
 
+            // Efecto de desvanecer
             mensajeEl.style.opacity = 0;
+            contenedorBotones.style.opacity = 0;
 
             setTimeout(() => {
-                if (pasoActual < dialogos.length - 1) {
-                    mensajeEl.innerText = dialogos[pasoActual].texto;
-                    btnPrincipal.innerText = dialogos[pasoActual].boton;
-                    pasoActual++;
-                } else if (pasoActual === dialogos.length - 1) {
-                    mensajeEl.innerText = dialogos[pasoActual].texto;
-                    btnPrincipal.classList.add('escondido');
+                const escena = historia[nodo];
+                mensajeEl.innerText = escena.texto;
+                
+                // Limpiamos los botones anteriores
+                contenedorBotones.innerHTML = '';
+
+                if (nodo === 'pregunta_cine') {
+                    // Si llegamos al final, escondemos el contenedor dinámico y mostramos el Sí/No
+                    contenedorBotones.classList.add('escondido');
                     botonesFinales.classList.remove('escondido');
+                } else {
+                    // Creamos los nuevos botones según la escena
+                    escena.botones.forEach(btn => {
+                        const botonEl = document.createElement('button');
+                        botonEl.className = 'boton-respuesta';
+                        botonEl.innerText = btn.texto;
+                        botonEl.onclick = () => irA(btn.destino);
+                        contenedorBotones.appendChild(botonEl);
+                    });
                 }
+
+                // Efecto de aparecer
                 mensajeEl.style.opacity = 1;
-            }, 400);
+                contenedorBotones.style.opacity = 1;
+            }, 400); // 400ms de transición
         }
 
+        // La función del Sí / No que ya tenías
         function respuestaFinal(respuesta) {
             const mensajeEl = document.getElementById('mensaje');
             const botonesFinales = document.getElementById('botones-finales');
@@ -119,12 +214,10 @@
             const btnNo = document.getElementById('btn-no');
 
             if (respuesta === 'si') {
-                // Si dice que sí, ocultamos botones y mostramos victoria
                 botonesFinales.classList.add('escondido');
                 mensajeEl.innerText = "¡Genial! Yo invito las palomas. 🍿🕷️";
                 gifFinal.classList.remove('escondido');
             } else {
-                // Si dice que no, entra al juego de insistir
                 contadorNo++;
                 mensajeEl.style.opacity = 0;
 
@@ -136,17 +229,10 @@
                         mensajeEl.innerText = "Te doy una oportunidad más... ¿Segura que no quieres ir?";
                         btnNo.innerText = "Sigo diciendo que no 😤";
                     } else if (contadorNo >= 3) {
-                        // Interacción final: Se acaban las opciones de decir que no
                         mensajeEl.innerText = "¡Ups! Ocurrió un error en el código y ya no puedes decir que no. ¿Vamos?";
-                        
-                        // Cambiamos el texto del botón de negación
                         btnNo.innerText = "¡Bueno, ya, sí voy! ❤️";
-                        
-                        // Le damos estilo rojo como al botón principal
                         btnNo.style.backgroundColor = "#e23636";
                         btnNo.style.borderColor = "#504caf";
-                        
-                        // Cambiamos la función para que ahora actúe como un "Sí"
                         btnNo.setAttribute('onclick', "respuestaFinal('si')");
                     }
                     mensajeEl.style.opacity = 1;
