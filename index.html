@@ -43,11 +43,11 @@
             margin: 10px;
             display: inline-block;
             font-weight: bold;
-            -webkit-tap-highlight-color: transparent; /* Quita el borde azul en móviles al tocar */
+            -webkit-tap-highlight-color: transparent;
         }
         
         .boton-respuesta:active {
-            transform: scale(0.95); /* Efecto de hundirse al presionar */
+            transform: scale(0.95);
         }
         
         .escondido {
@@ -59,7 +59,7 @@
             height: auto;
             border-radius: 10px;
             margin-top: 20px;
-            box-shadow: 0 0 15px rgba(226, 54, 54, 0.5); /* Resplandor rojo */
+            box-shadow: 0 0 15px rgba(226, 54, 54, 0.5);
         }
     </style>
 </head>
@@ -72,8 +72,8 @@
     </div>
 
     <div id="botones-finales" class="escondido">
-        <button class="boton-respuesta" onclick="respuestaFinal('si')">¡Obvio que sí! 🕸️</button>
-        <button class="boton-respuesta" style="background-color: #333; border-color: #555;" onclick="respuestaFinal('no')">No puedo 😔</button>
+        <button id="btn-si" class="boton-respuesta" onclick="respuestaFinal('si')">¡Obvio que sí! 🕸️</button>
+        <button id="btn-no" class="boton-respuesta" style="background-color: #333; border-color: #555;" onclick="respuestaFinal('no')">No puedo 😔</button>
     </div>
 
     <div id="gif-final" class="gif-container escondido">
@@ -81,54 +81,76 @@
     </div>
 
     <script>
-        // Aquí configuras el diálogo. Cada línea es un paso.
         const dialogos = [
             { texto: "Tengo una pregunta muy importante que hacerte...", boton: "¿De qué se trata? 🤔" },
-            { texto: "Quiero tomarme un pequeño descanso del código y de los ensayos esta semana...", boton: "Aja... sigue 👀" },
-            { texto: "¿Me acompañarías al cine a ver la nueva de Spider-Man?", boton: "" } // El botón aquí no importa porque mostraremos el Sí/No
+            { texto: "Yo estaba pensandooooooooo 👀", boton: "Aja... sigue 👀" },
+            { texto: "¿Quisieras ir a ver el estreno de SPIDER MAN BRAND NEW DAY conmigo?", boton: "" }
         ];
 
         let pasoActual = 0;
+        let contadorNo = 0; // Agregamos un contador para las veces que dice "No"
 
         function siguientePaso() {
             const mensajeEl = document.getElementById('mensaje');
             const btnPrincipal = document.getElementById('btn-principal');
             const botonesFinales = document.getElementById('botones-finales');
 
-            // Desvanecemos el texto
             mensajeEl.style.opacity = 0;
 
-            // Esperamos un momento y cambiamos el contenido
             setTimeout(() => {
                 if (pasoActual < dialogos.length - 1) {
-                    // Actualizamos texto y botón
                     mensajeEl.innerText = dialogos[pasoActual].texto;
                     btnPrincipal.innerText = dialogos[pasoActual].boton;
                     pasoActual++;
                 } else if (pasoActual === dialogos.length - 1) {
-                    // Última pregunta: Ocultamos el botón principal y mostramos Sí/No
                     mensajeEl.innerText = dialogos[pasoActual].texto;
                     btnPrincipal.classList.add('escondido');
                     botonesFinales.classList.remove('escondido');
                 }
-                // Hacemos aparecer el nuevo texto
                 mensajeEl.style.opacity = 1;
-            }, 400); // 400 milisegundos de transición
+            }, 400);
         }
 
         function respuestaFinal(respuesta) {
             const mensajeEl = document.getElementById('mensaje');
             const botonesFinales = document.getElementById('botones-finales');
             const gifFinal = document.getElementById('gif-final');
-
-            // Ocultamos las opciones
-            botonesFinales.classList.add('escondido');
+            const btnSi = document.getElementById('btn-si');
+            const btnNo = document.getElementById('btn-no');
 
             if (respuesta === 'si') {
+                // Si dice que sí, ocultamos botones y mostramos victoria
+                botonesFinales.classList.add('escondido');
                 mensajeEl.innerText = "¡Genial! Yo invito las palomas. 🍿🕷️";
-                gifFinal.classList.remove('escondido'); // Mostramos el GIF animado
+                gifFinal.classList.remove('escondido');
             } else {
-                mensajeEl.innerText = "¡Oh, qué lástima! Será para la próxima. 🥲";
+                // Si dice que no, entra al juego de insistir
+                contadorNo++;
+                mensajeEl.style.opacity = 0;
+
+                setTimeout(() => {
+                    if (contadorNo === 1) {
+                        mensajeEl.innerText = "A ver, lo voy a preguntar otra vez... ¿quieres ver el estreno?";
+                        btnNo.innerText = "Mmm... no 🙈";
+                    } else if (contadorNo === 2) {
+                        mensajeEl.innerText = "Te doy una oportunidad más... ¿Segura que no quieres ir?";
+                        btnNo.innerText = "Sigo diciendo que no 😤";
+                    } else if (contadorNo >= 3) {
+                        // Interacción final: Se acaban las opciones de decir que no
+                        mensajeEl.innerText = "¡Ups! Ocurrió un error en el código y ya no puedes decir que no. ¿Vamos?";
+                        
+                        // Cambiamos el texto del botón de negación
+                        btnNo.innerText = "¡Bueno, ya, sí voy! ❤️";
+                        
+                        // Le damos estilo rojo como al botón principal
+                        btnNo.style.backgroundColor = "#e23636";
+                        btnNo.style.borderColor = "#504caf";
+                        
+                        // Cambiamos la función para que ahora actúe como un "Sí"
+                        btnNo.setAttribute('onclick', "respuestaFinal('si')");
+                    }
+                    mensajeEl.style.opacity = 1;
+                }, 400);
             }
         }
     </script>
