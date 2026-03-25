@@ -22,7 +22,7 @@
         }
         
         #mensaje {
-            font-size: 26px;
+            font-size: 24px;
             margin-bottom: 30px;
             min-height: 80px;
             font-weight: bold;
@@ -97,7 +97,7 @@
     </div>
 
     <script>
-        // MOTOR DE HISTORIA: Cada bloque es una "escena" con su texto y sus opciones.
+        // MOTOR DE HISTORIA: Árbol de diálogo expandido y centrado en ella
         const historia = {
             inicio: {
                 texto: "Tengo una pregunta muy importante que hacerte...",
@@ -106,50 +106,78 @@
                 ]
             },
             como_estas: {
-                texto: "Espera, primero... ¿cómo estás hoy? 😌",
+                texto: "Espera, primero lo primero... ¿Cómo ha estado tu día hoy? 😌",
                 botones: [
                     { texto: "¡Súper bien! ✨", destino: "bien" },
                     { texto: "Sobreviviendo a la semana 😵‍💫", destino: "cansada" },
+                    { texto: "Un poco aburrida 🥱", destino: "aburrida" },
                     { texto: "Intrigada por tu pregunta 👀", destino: "intrigada" }
                 ]
             },
-            // RUTA 1: Si dice que está súper bien
+            // RUTA 1: Si está bien
             bien: {
-                texto: "¡Qué éxito! Yo también. Aunque confieso que andaba peleando con un código para la u, pero ya quedó.",
+                texto: "¡Qué maravilla! Me alegra muchísimo leer eso. ¿Y eso que andas de tan buen humor?",
                 botones: [
-                    { texto: "¡Qué bueno! ¿Y la música?", destino: "musica_bien" }
+                    { texto: "Simplemente es un buen día 😊", destino: "buen_dia" },
+                    { texto: "Adivina... 🤭", destino: "adivina" }
                 ]
             },
-            musica_bien: {
-                texto: "Súper. Practicando bastante con la guitarra para que Revolver suene brutal. Pero bueno, no vine a hablar de mis acordes...",
+            buen_dia: {
+                texto: "Me encanta esa vibra. Y creo que tengo la idea perfecta para que tu día termine siendo un 10/10...",
                 botones: [
-                    { texto: "Entonces dime...", destino: "transicion" }
+                    { texto: "A ver, te escucho 👀", destino: "transicion" }
                 ]
             },
-            // RUTA 2: Si dice que está cansada
+            adivina: {
+                texto: "Uy, me dejas con la intriga. Me lo tendrás que contar todo en persona. Y hablando de vernos en persona...",
+                botones: [
+                    { texto: "Mmm, ¿a dónde va esto? 🤔", destino: "transicion" }
+                ]
+            },
+            // RUTA 2: Si está cansada
             cansada: {
-                texto: "Te entiendo perfecto... Yo también quedé un poco frito después del último ensayo con Revolver.",
+                texto: "Ay no... te mando mucha energía virtual 🔋. ¿Ha estado muy pesado el día?",
                 botones: [
-                    { texto: "¿Estuvo pesado?", destino: "ensayo_cansada" }
+                    { texto: "Sí, demasiadas cosas 😩", destino: "pesado" },
+                    { texto: "Un poco, pero ya casi termino 😮‍💨", destino: "termina" }
                 ]
             },
-            ensayo_cansada: {
-                texto: "Un poco, sacando temas nuevos con la guitarra. Pero justo por eso creo que ambos necesitamos una buena pausa...",
+            pesado: {
+                texto: "Entonces es oficial: necesitas urgentemente una distracción, salir un rato y desconectar de todo ese estrés.",
                 botones: [
-                    { texto: "Totalmente de acuerdo 😮‍💨", destino: "transicion" }
+                    { texto: "La verdad sí lo necesito 🥺", destino: "transicion" }
                 ]
             },
-            // RUTA 3: Si dice que está intrigada
+            termina: {
+                texto: "Esa es la actitud. Y para celebrar que ya casi sobrevives, se me ocurrió un plan de rescate perfecto...",
+                botones: [
+                    { texto: "¿Plan de rescate? 🦸‍♀️", destino: "transicion" }
+                ]
+            },
+            // RUTA 3: Si está aburrida
+            aburrida: {
+                texto: "¿Aburrida? ¡Eso es inaceptable! Misión de rescate activada de inmediato 🚨",
+                botones: [
+                    { texto: "Jajaja, a ver sorpréndeme 😂", destino: "sorprendeme" }
+                ]
+            },
+            sorprendeme: {
+                texto: "Prepárate, porque es un plan infalible para combatir el aburrimiento...",
+                botones: [
+                    { texto: "Ya, dime qué es 👀", destino: "transicion" }
+                ]
+            },
+            // RUTA 4: Si está intrigada
             intrigada: {
-                texto: "Jajaja, la curiosidad mató al gato... pero bueno, el misterio le da un toque emocionante.",
+                texto: "Jajaja, me gusta mantener el misterio... pero bueno, no te haré sufrir más.",
                 botones: [
                     { texto: "¡Ya dimeee! 😠", destino: "intrigada_2" }
                 ]
             },
             intrigada_2: {
-                texto: "Tranquila, tranquila. Prometo no aburrirte hablando de mis tareas o de mis acordes en la guitarra. Vale la pena la espera.",
+                texto: "Redoble de tambores, por favor... 🥁",
                 botones: [
-                    { texto: "Eso espero... 👀", destino: "transicion" }
+                    { texto: "🥁🥁🥁", destino: "transicion" }
                 ]
             },
             // CONVERGENCIA: Todas las rutas llegan aquí
@@ -167,13 +195,11 @@
 
         let contadorNo = 0;
 
-        // Función que navega entre las escenas
         function irA(nodo) {
             const mensajeEl = document.getElementById('mensaje');
             const contenedorBotones = document.getElementById('botones-container');
             const botonesFinales = document.getElementById('botones-finales');
 
-            // Efecto de desvanecer
             mensajeEl.style.opacity = 0;
             contenedorBotones.style.opacity = 0;
 
@@ -181,15 +207,12 @@
                 const escena = historia[nodo];
                 mensajeEl.innerText = escena.texto;
                 
-                // Limpiamos los botones anteriores
                 contenedorBotones.innerHTML = '';
 
                 if (nodo === 'pregunta_cine') {
-                    // Si llegamos al final, escondemos el contenedor dinámico y mostramos el Sí/No
                     contenedorBotones.classList.add('escondido');
                     botonesFinales.classList.remove('escondido');
                 } else {
-                    // Creamos los nuevos botones según la escena
                     escena.botones.forEach(btn => {
                         const botonEl = document.createElement('button');
                         botonEl.className = 'boton-respuesta';
@@ -199,18 +222,15 @@
                     });
                 }
 
-                // Efecto de aparecer
                 mensajeEl.style.opacity = 1;
                 contenedorBotones.style.opacity = 1;
-            }, 400); // 400ms de transición
+            }, 400); 
         }
 
-        // La función del Sí / No que ya tenías
         function respuestaFinal(respuesta) {
             const mensajeEl = document.getElementById('mensaje');
             const botonesFinales = document.getElementById('botones-finales');
             const gifFinal = document.getElementById('gif-final');
-            const btnSi = document.getElementById('btn-si');
             const btnNo = document.getElementById('btn-no');
 
             if (respuesta === 'si') {
@@ -229,8 +249,8 @@
                         mensajeEl.innerText = "Te doy una oportunidad más... ¿Segura que no quieres ir?";
                         btnNo.innerText = "Sigo diciendo que no 😤";
                     } else if (contadorNo >= 3) {
-                        mensajeEl.innerText = "¡Ups! Ocurrió un error en el código y ya no puedes decir que no. ¿Vamos?";
-                        btnNo.innerText = "¡Bueno, ya, sí voy! ❤️";
+                        mensajeEl.innerText = "¡Ups! Ocurrió un error en el sistema y ya no puedes decir que no. ¿Vamos?";
+                        btnNo.innerText = "¡Bueno, ya, sí voooy! ❤️";
                         btnNo.style.backgroundColor = "#e23636";
                         btnNo.style.borderColor = "#504caf";
                         btnNo.setAttribute('onclick', "respuestaFinal('si')");
