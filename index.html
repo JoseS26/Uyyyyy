@@ -97,7 +97,7 @@
     </div>
 
     <script>
-        // MOTOR DE HISTORIA: Árbol de diálogo expandido y centrado en ella
+        // MOTOR DE HISTORIA
         const historia = {
             inicio: {
                 texto: "Tengo una pregunta muy importante que hacerte...",
@@ -114,7 +114,8 @@
                     { texto: "Intrigada por tu pregunta 👀", destino: "intrigada" }
                 ]
             },
-            // RUTA 1: Si está bien
+            
+            // RUTAS INICIALES
             bien: {
                 texto: "¡Qué maravilla! Me alegra muchísimo leer eso. ¿Y eso que andas de tan buen humor?",
                 botones: [
@@ -125,16 +126,16 @@
             buen_dia: {
                 texto: "Me encanta esa vibra. Y creo que tengo la idea perfecta para que tu día termine siendo un 10/10...",
                 botones: [
-                    { texto: "A ver, te escucho 👀", destino: "transicion" }
+                    { texto: "A ver, te escucho 👀", destino: "suspenso_1" }
                 ]
             },
             adivina: {
                 texto: "Uy, me dejas con la intriga. Me lo tendrás que contar todo en persona. Y hablando de vernos en persona...",
                 botones: [
-                    { texto: "Mmm, ¿a dónde va esto? 🤔", destino: "transicion" }
+                    { texto: "Mmm, ¿a dónde va esto? 🤔", destino: "suspenso_1" }
                 ]
             },
-            // RUTA 2: Si está cansada
+            
             cansada: {
                 texto: "Ay no... te mando mucha energía virtual 🔋. ¿Ha estado muy pesado el día?",
                 botones: [
@@ -145,51 +146,86 @@
             pesado: {
                 texto: "Entonces es oficial: necesitas urgentemente una distracción, salir un rato y desconectar de todo ese estrés.",
                 botones: [
-                    { texto: "La verdad sí lo necesito 🥺", destino: "transicion" }
+                    { texto: "La verdad sí lo necesito 🥺", destino: "suspenso_1" }
                 ]
             },
             termina: {
                 texto: "Esa es la actitud. Y para celebrar que ya casi sobrevives, se me ocurrió un plan de rescate perfecto...",
                 botones: [
-                    { texto: "¿Plan de rescate? 🦸‍♀️", destino: "transicion" }
+                    { texto: "¿Plan de rescate? 🦸‍♀️", destino: "suspenso_1" }
                 ]
             },
-            // RUTA 3: Si está aburrida
+            
             aburrida: {
                 texto: "¿Aburrida? ¡Eso es inaceptable! Misión de rescate activada de inmediato 🚨",
                 botones: [
-                    { texto: "Jajaja, a ver sorpréndeme 😂", destino: "sorprendeme" }
+                    { texto: "Jajaja, a ver sorpréndeme 😂", destino: "suspenso_1" }
                 ]
             },
-            sorprendeme: {
-                texto: "Prepárate, porque es un plan infalible para combatir el aburrimiento...",
-                botones: [
-                    { texto: "Ya, dime qué es 👀", destino: "transicion" }
-                ]
-            },
-            // RUTA 4: Si está intrigada
+            
             intrigada: {
                 texto: "Jajaja, me gusta mantener el misterio... pero bueno, no te haré sufrir más.",
                 botones: [
-                    { texto: "¡Ya dimeee! 😠", destino: "intrigada_2" }
+                    { texto: "¡Ya dimeee! 😠", destino: "suspenso_1" }
                 ]
             },
-            intrigada_2: {
-                texto: "Redoble de tambores, por favor... 🥁",
+
+            // FASE DE SUSPENSO MOLESTOSO
+            suspenso_1: {
+                texto: "Bueno, te cuento... la cosa es que yo estaba pensandooooooooo 👀",
                 botones: [
-                    { texto: "🥁🥁🥁", destino: "transicion" }
+                    { texto: "¿Pensando qué? 🤨", destino: "suspenso_2" }
                 ]
             },
-            // CONVERGENCIA: Todas las rutas llegan aquí
-            transicion: {
-                texto: "Bueno, te cuento... yo estaba pensandooooooooo 👀",
+            suspenso_2: {
+                texto: "Es que no sé si decirte... me da un poco de cosita 🙈",
                 botones: [
-                    { texto: "Aja... sigue 👀", destino: "pregunta_cine" }
+                    { texto: "¡Dime ya! 😠", destino: "suspenso_3" },
+                    { texto: "Me estás estresando 🙄", destino: "suspenso_3" }
                 ]
             },
+            suspenso_3: {
+                texto: "Ok ok, ya voy. Pero respira profundo primero. 🧘‍♀️",
+                botones: [
+                    { texto: "Ya respiré, HABLA 😤", destino: "suspenso_4" }
+                ]
+            },
+            suspenso_4: {
+                texto: "La verdad absoluta es que... estaba revisando mi calendario...",
+                botones: [
+                    { texto: "Aja... ⏳", destino: "suspenso_5" }
+                ]
+            },
+            suspenso_5: {
+                texto: "...y me di cuenta de un problema gravísimo. 🚨",
+                botones: [
+                    { texto: "¿Qué pasó? 😨", destino: "suspenso_6" }
+                ]
+            },
+            suspenso_6: {
+                texto: "Que se acerca un evento histórico y necesito a la mejor acompañante del mundo.",
+                botones: [
+                    { texto: "¿Evento histórico? 🤔", destino: "suspenso_7" }
+                ]
+            },
+            suspenso_7: {
+                texto: "Sí... prepárate mentalmente porque ahora sí viene la pregunta real.",
+                botones: [
+                    { texto: "¡SUÉLTALO YA! 😡", destino: "suspenso_8" },
+                    { texto: "Voy a cerrar la página 😒", destino: "suspenso_8" }
+                ]
+            },
+            suspenso_8: {
+                texto: "Jajaja mentira, mentira, ya te digo en serio. 🤭",
+                botones: [
+                    { texto: "Te leo... 👀", destino: "pregunta_cine" }
+                ]
+            },
+
+            // LA GRAN PREGUNTA
             pregunta_cine: {
-                texto: "¿Quisieras ir a ver el estreno de SPIDER MAN BRAND NEW DAY conmigo?",
-                botones: [] // Aquí no hay botones porque activamos los botones finales de Sí y No
+                texto: "Por fin... ¿Quisieras ir a ver el estreno de SPIDER MAN BRAND NEW DAY conmigo?",
+                botones: [] // Aquí activamos los botones finales de Sí y No
             }
         };
 
@@ -250,7 +286,7 @@
                         btnNo.innerText = "Sigo diciendo que no 😤";
                     } else if (contadorNo >= 3) {
                         mensajeEl.innerText = "¡Ups! Ocurrió un error en el sistema y ya no puedes decir que no. ¿Vamos?";
-                        btnNo.innerText = "¡Bueno, ya, sí voooy! ❤️";
+                        btnNo.innerText = "¡Bueno, ya, sí voy! ❤️";
                         btnNo.style.backgroundColor = "#e23636";
                         btnNo.style.borderColor = "#504caf";
                         btnNo.setAttribute('onclick', "respuestaFinal('si')");
